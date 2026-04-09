@@ -62,16 +62,16 @@ async function migrateData(client) {
   // Insérer les produits
   for (const p of data.products) {
     await client.query(
-      `INSERT INTO products (id, name, category_id, description, image, link, price)
+      `INSERT INTO products (id, name, category_id, brand, image, link, price)
        VALUES ($1, $2, $3, $4, $5, $6, $7)
        ON CONFLICT (id) DO UPDATE SET
          name        = EXCLUDED.name,
          category_id = EXCLUDED.category_id,
-         description = EXCLUDED.description,
+         brand       = EXCLUDED.brand,
          image       = EXCLUDED.image,
          link        = EXCLUDED.link,
          price       = EXCLUDED.price`,
-      [p.id, p.name, p.category, p.description, p.image, p.link, p.price]
+      [p.id, p.name, p.category, p.brand || "", p.image, p.link, p.price]
     );
     prodCount++;
   }
