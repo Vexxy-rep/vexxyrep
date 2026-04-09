@@ -99,7 +99,7 @@
         <button class="category-btn ${active ? "active" : ""}"
                 data-id="${esc(cat.id)}" aria-pressed="${active}">
           ${esc(cat.label)}
-          <span class="cat-count">${count}</span>
+          <span class="cat-count">${fmtCount(count)}</span>
         </button>
       `;
     }).join("");
@@ -114,7 +114,7 @@
           <button class="brand-option ${activeCategory === cat.id ? "active" : ""}"
                   data-value="${esc(cat.id)}" role="option">
             <span class="brand-dot"></span>${esc(cat.label)}
-            <span class="cat-count" style="margin-left:auto">${count}</span>
+            <span class="cat-count" style="margin-left:auto">${fmtCount(count)}</span>
           </button>
         `;
       }).join("");
@@ -139,16 +139,21 @@
     });
   }
 
+  function fmtCount(n) { return n > 99 ? "99+" : String(n); }
+
   function populateBrandFilter() {
     const menu  = $("brandDropdownMenu");
     const label = $("brandDropdownLabel");
     if (!menu) return;
     const productBrands = PRODUCTS.map(p => p.brand).filter(Boolean);
     const brands = [...new Set([...DEFAULT_BRANDS, ...productBrands])].sort();
-    const all = [{ value: "", text: "Toutes les marques" }, ...brands.map(b => ({ value: b, text: b }))];
+    const counts = {};
+    PRODUCTS.forEach(p => { if (p.brand) counts[p.brand] = (counts[p.brand] || 0) + 1; });
+    const all = [{ value: "", text: "Toutes les marques", count: PRODUCTS.length }, ...brands.map(b => ({ value: b, text: b, count: counts[b] || 0 }))];
     menu.innerHTML = all.map(b => `
       <button class="brand-option ${activeBrand === b.value ? "active" : ""}" data-value="${esc(b.value)}" role="option">
         <span class="brand-dot"></span>${esc(b.text)}
+        <span class="cat-count" style="margin-left:auto">${fmtCount(b.count)}</span>
       </button>
     `).join("");
     label.textContent = activeBrand || "Toutes les marques";
