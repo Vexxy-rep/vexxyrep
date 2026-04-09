@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VexxyRep — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- ══════ LOGIN ══════ -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <img src="images/logo site rempli.png" alt="VexxyRep" class="login-logo">
+      <h1>Administration</h1>
+      <p class="login-sub">Accès réservé</p>
+      <form id="loginForm">
+        <input type="password" id="loginPassword" placeholder="Mot de passe" autocomplete="current-password" required>
+        <button type="submit" class="btn btn-primary btn-full">Se connecter</button>
+        <div class="login-error" id="loginError"></div>
+      </form>
+      <a href="/" class="login-back">← Retour au catalogue</a>
+    </div>
+  </div>
+
+  <!-- ══════ DASHBOARD ══════ -->
+  <div class="dashboard hidden" id="dashboard">
+
+    <header class="admin-header">
+      <div class="header-brand">
+        <img src="images/logo site rempli.png" alt="" class="header-logo">
+        <span>Admin</span>
+      </div>
+      <div class="header-actions">
+        <a href="/" target="_blank" class="btn btn-ghost">Voir le site ↗</a>
+        <button class="btn btn-ghost" id="logoutBtn">Déconnexion</button>
+      </div>
+    </header>
+
+    <div class="admin-tabs">
+      <button class="tab active" data-tab="products">
+        Produits <span class="badge" id="prodBadge">0</span>
+      </button>
+      <button class="tab" data-tab="categories">
+        Catégories
+      </button>
+    </div>
+
+    <main class="admin-main">
+
+      <!-- Tab Produits -->
+      <div class="tab-panel active" id="tab-products">
+        <div class="panel-toolbar">
+          <input type="search" id="adminSearch" class="admin-search" placeholder="Rechercher un produit…">
+          <select id="catFilter" class="admin-cat-filter">
+            <option value="">Toutes catégories</option>
+          </select>
+          <button class="btn btn-primary" id="addProductBtn">+ Ajouter</button>
+        </div>
+        <div id="productsList" class="products-list"></div>
+      </div>
+
+      <!-- Tab Catégories -->
+      <div class="tab-panel" id="tab-categories">
+        <div class="panel-toolbar">
+          <button class="btn btn-primary" id="addCatBtn">+ Catégorie</button>
+        </div>
+        <div id="categoriesList" class="categories-list"></div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ══════ MODAL PRODUIT ══════ -->
+  <div class="modal-overlay hidden" id="productModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">Ajouter un produit</h2>
+        <button class="modal-close" id="closeProductModal">✕</button>
+      </div>
+      <form id="productForm" class="modal-body">
+        <input type="hidden" id="fieldId">
+        <div class="form-row">
+          <div class="field">
+            <label>Nom *</label>
+            <input type="text" id="fieldName" required placeholder="Nom du produit">
+          </div>
+          <div class="field">
+            <label>Prix</label>
+            <input type="text" id="fieldPrice" placeholder="Ex : 29.99€">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Catégorie</label>
+            <select id="fieldCategory"></select>
+          </div>
+          <div class="field">
+            <label>Marque</label>
+            <input type="text" id="fieldBrand" placeholder="Ex : Nike, Adidas…">
+          </div>
+        </div>
+        <div class="field">
+          <label>Image</label>
+          <div class="image-row">
+            <input type="text" id="fieldImage" placeholder="URL ou images/photo.jpg">
+            <label class="btn btn-ghost file-label">
+              📁
+              <input type="file" id="fieldFile" accept="image/*">
+            </label>
+          </div>
+          <img id="imgPreview" class="img-preview hidden" alt="Aperçu">
+        </div>
+        <div class="field">
+          <label>Lien produit</label>
+          <input type="text" id="fieldLink" placeholder="https://…">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" id="cancelProduct">Annuler</button>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ══════ MODAL CATÉGORIE ══════ -->
+  <div class="modal-overlay hidden" id="catModal">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h2>Nouvelle catégorie</h2>
+        <button class="modal-close" id="closeCatModal">✕</button>
+      </div>
+      <form id="catForm" class="modal-body">
+        <div class="field">
+          <label>Nom affiché *</label>
+          <input type="text" id="catLabel" required placeholder="Ex : Robes">
+        </div>
+        <div class="field">
+          <label>ID (auto-généré)</label>
+          <input type="text" id="catId" required placeholder="Ex : robes" pattern="[a-z0-9\-]+">
+          <small>Minuscules, sans espaces</small>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" id="cancelCat">Annuler</button>
+          <button type="submit" class="btn btn-primary">Créer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ══════ CONFIRM DELETE ══════ -->
+  <div class="modal-overlay hidden" id="confirmModal">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h2>Confirmer la suppression</h2>
+      </div>
+      <div class="modal-body">
+        <p id="confirmText">Supprimer cet élément ?</p>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" id="cancelConfirm">Annuler</button>
+          <button class="btn btn-danger" id="confirmDelete">Supprimer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="a-toast hidden" id="aToast"></div>
+
+  <!-- Cursor glow -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <script src="js/admin.js"></script>
+  <script>
+    (function () {
+      const glow = document.getElementById("cursorGlow");
+      document.addEventListener("mousemove", e => {
+        glow.style.left = e.clientX + "px";
+        glow.style.top  = e.clientY + "px";
+      });
+    })();
+  </script>
+</body>
+</html>

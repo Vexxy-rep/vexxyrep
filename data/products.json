@@ -1,0 +1,156 @@
+{
+  "config": {
+    "name": "VexxyRep",
+    "discordUrl": "https://discord.gg/HV4SUUCcz4",
+    "tiktokUrl": "https://www.tiktok.com/@TON_COMPTE"
+  },
+  "categories": [
+    {
+      "id": "all",
+      "label": "Tous"
+    },
+    {
+      "id": "tshirts",
+      "label": "T-Shirts"
+    },
+    {
+      "id": "hoodies",
+      "label": "Hoodies"
+    },
+    {
+      "id": "pantalons",
+      "label": "Pantalons"
+    },
+    {
+      "id": "vestes",
+      "label": "Vestes"
+    },
+    {
+      "id": "accessoires",
+      "label": "Accessoires"
+    },
+    {
+      "id": "autre",
+      "label": "Autres"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "T-Shirt Forest Wash",
+      "category": "tshirts",
+      "description": "Poids :",
+      "image": "https://picsum.photos/seed/vexxyrep-ts1/400/500",
+      "link": "https://exemple.com/produits/tshirt-forest-wash",
+      "price": "34.99€"
+    },
+    {
+      "id": 2,
+      "name": "T-Shirt Graphic VexxyRep",
+      "category": "tshirts",
+      "description": "Poids :",
+      "image": "https://picsum.photos/seed/vexxyrep-ts2/400/500",
+      "link": "https://exemple.com/produits/tshirt-graphic-vexxyrep",
+      "price": "39.99€"
+    },
+    {
+      "id": 3,
+      "name": "T-Shirt Essential",
+      "category": "tshirts",
+      "description": "Poids :",
+      "image": "https://picsum.photos/seed/vexxyrep-ts3/400/500",
+      "link": "https://exemple.com/produits/tshirt-essential",
+      "price": "29.99€"
+    },
+    {
+      "id": 4,
+      "name": "Hoodie Forêt Profonde",
+      "category": "hoodies",
+      "description": "Poids :",
+      "image": "https://picsum.photos/seed/vexxyrep-hd1/400/500",
+      "link": "https://exemple.com/produits/hoodie-foret",
+      "price": "79.99€"
+    },
+    {
+      "id": 5,
+      "name": "Sweat Crewneck VexxyRep",
+      "category": "hoodies",
+      "description": "Poids :",
+      "image": "https://picsum.photos/seed/vexxyrep-hd2/400/500",
+      "link": "https://exemple.com/produits/sweat-crewneck",
+      "price": "64.99€"
+    },
+    {
+      "id": 6,
+      "name": "Hoodie Zip Premium",
+      "category": "hoodies",
+      "description": "Poids :",
+      "image": "https://picsum.photos/seed/vexxyrep-hd3/400/500",
+      "link": "https://exemple.com/produits/hoodie-zip",
+      "price": "84.99€"
+    },
+    {
+      "id": 7,
+      "name": "Cargo Techno",
+      "category": "pantalons",
+      "description": "Poids :",
+      "image": "https://picsum.photos/seed/vexxyrep-pt1/400/500",
+      "link": "https://exemple.com/produits/cargo-techno",
+      "price": "89.99€"
+    },
+    {
+      "id": 8,
+      "name": "Jogger Lounge",
+      "category": "pantalons",
+      "description": "Poids :",
+      "image": "https://picsum.photos/seed/vexxyrep-pt2/400/500",
+      "link": "https://exemple.com/produits/jogger-lounge",
+      "price": "54.99€"
+    },
+    {
+      "id": 9,
+      "name": "Veste Bomber VexxyRep",
+      "category": "vestes",
+      "description": "Poids :",
+      "image": "https://picsum.photos/seed/vexxyrep-vj1/400/500",
+      "link": "https://exemple.com/produits/bomber-vexxyrep",
+      "price": "119.99€"
+    },
+    {
+      "id": 10,
+      "name": "Veste Coupe-Vent",
+      "category": "vestes",
+      "description": "Poids :",
+      "image": "https://picsum.photos/seed/vexxyrep-vj2/400/500",
+      "link": "https://exemple.com/produits/coupe-vent",
+      "price": "99.99€"
+    },
+    {
+      "id": 11,
+      "name": "Casquette Leaf",
+      "category": "accessoires",
+      "description": "Poids :",
+      "image": "https://picsum.photos/seed/vexxyrep-ac1/400/500",
+      "link": "https://exemple.com/produits/casquette-leaf",
+      "price": "29.99€"
+    },
+    {
+      "id": 12,
+      "name": "Tote Bag VexxyRep",
+      "category": "accessoires",
+      "description": "Poids :",
+      "image": "https://picsum.photos/seed/vexxyrep-ac2/400/500",
+      "link": "https://exemple.com/produits/tote-bag",
+      "price": "19.99€"
+    },
+    {
+      "id": 13,
+      "name": "test2",
+      "category": "autre",
+      "description": "Poids :",
+      "image": "",
+      "link": "",
+      "price": "20$"
+    }
+  ]
+}
