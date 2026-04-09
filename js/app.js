@@ -186,15 +186,13 @@
     productsCount.textContent =
       `${filtered.length} article${filtered.length !== 1 ? "s" : ""}`;
 
-    // Barre résultats style Google
+    // Barre résultats
     if (isSearch) {
       searchResultsText.innerHTML =
         `<strong>${filtered.length}</strong> résultat${filtered.length !== 1 ? "s" : ""} pour « <strong>${esc(q)}</strong> »`;
       searchResultsBar.classList.remove("hidden");
-      productsGrid.classList.add("search-mode");
     } else {
       searchResultsBar.classList.add("hidden");
-      productsGrid.classList.remove("search-mode");
     }
 
     if (filtered.length === 0) {
