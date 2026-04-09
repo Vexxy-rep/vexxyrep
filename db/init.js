@@ -29,13 +29,15 @@ async function createTables(client) {
       id          SERIAL       PRIMARY KEY,
       name        VARCHAR(200) NOT NULL,
       category_id VARCHAR(50)  REFERENCES categories(id) ON DELETE SET NULL,
-      description TEXT         DEFAULT '',
+      brand       VARCHAR(100) DEFAULT '',
       image       TEXT         DEFAULT '',
       link        TEXT         DEFAULT '',
       price       VARCHAR(50)  DEFAULT '',
       created_at  TIMESTAMPTZ  DEFAULT NOW()
     );
   `);
+  // Migration : ajoute brand si la table existait déjà sans cette colonne
+  await client.query(`ALTER TABLE products ADD COLUMN IF NOT EXISTS brand VARCHAR(100) DEFAULT '';`);
 
   console.log("   ✓ Tables créées (ou déjà existantes)");
 }
