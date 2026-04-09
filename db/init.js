@@ -89,7 +89,7 @@ async function run() {
   try {
     await client.query("BEGIN");
     await createTables(client);
-    await migrateData(client);
+    await migrateData(client);  // insère/met à jour catégories seulement (products vide)
     await client.query("COMMIT");
     console.log("\n✅ Base de données prête !\n");
   } catch (err) {
