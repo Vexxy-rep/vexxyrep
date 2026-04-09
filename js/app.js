@@ -91,6 +91,7 @@
     const counts = {};
     PRODUCTS.forEach(p => { counts[p.category] = (counts[p.category] || 0) + 1; });
 
+    // Boutons desktop
     categoriesContainer.innerHTML = CATEGORIES.map(cat => {
       const count  = cat.id === "all" ? PRODUCTS.length : (counts[cat.id] || 0);
       const active = cat.id === activeCategory;
@@ -102,6 +103,26 @@
         </button>
       `;
     }).join("");
+
+    // Dropdown mobile
+    const catMenu  = $("catDropdownMenu");
+    const catLabel = $("catDropdownLabel");
+    if (catMenu) {
+      catMenu.innerHTML = CATEGORIES.map(cat => {
+        const count = cat.id === "all" ? PRODUCTS.length : (counts[cat.id] || 0);
+        return `
+          <button class="brand-option ${activeCategory === cat.id ? "active" : ""}"
+                  data-value="${esc(cat.id)}" role="option">
+            <span class="brand-dot"></span>${esc(cat.label)}
+            <span class="cat-count" style="margin-left:auto">${count}</span>
+          </button>
+        `;
+      }).join("");
+    }
+    if (catLabel) {
+      const current = CATEGORIES.find(c => c.id === activeCategory);
+      catLabel.textContent = current ? current.label : "Tous";
+    }
   }
 
   // ---- Filtrage ----
@@ -376,7 +397,7 @@
 
   // ---- Events ----
   function bindEvents() {
-    // Catégories
+    // Catégories (desktop)
     categoriesContainer.addEventListener("click", e => {
       const btn = e.target.closest(".category-btn");
       if (!btn) return;
@@ -386,8 +407,45 @@
         b.classList.toggle("active", b.dataset.id === activeCategory);
         b.setAttribute("aria-pressed", b.dataset.id === activeCategory);
       });
+      renderCategories();
       renderProducts();
     });
+
+    // ---- Dropdown catégorie (mobile) ----
+    const catDropdown = $("catDropdown");
+    const catDropdownMenu = $("catDropdownMenu");
+    const catDropdownBtn  = $("catDropdownBtn");
+
+    if (catDropdownBtn) {
+      catDropdownBtn.addEventListener("click", e => {
+        e.stopPropagation();
+        const isOpen = catDropdown.classList.toggle("open");
+        catDropdownMenu.classList.toggle("hidden", !isOpen);
+      });
+
+      catDropdownMenu.addEventListener("click", e => {
+        const opt = e.target.closest(".brand-option");
+        if (!opt) return;
+        activeCategory = opt.dataset.value;
+        currentPage = 1;
+        catDropdown.classList.remove("open");
+        catDropdownMenu.classList.add("hidden");
+        // Sync boutons desktop
+        document.querySelectorAll(".category-btn").forEach(b => {
+          b.classList.toggle("active", b.dataset.id === activeCategory);
+          b.setAttribute("aria-pressed", b.dataset.id === activeCategory);
+        });
+        renderCategories();
+        renderProducts();
+      });
+
+      document.addEventListener("click", e => {
+        if (!e.target.closest("#catDropdown")) {
+          catDropdown.classList.remove("open");
+          catDropdownMenu.classList.add("hidden");
+        }
+      });
+    }
 
     // ---- Filtre marque (dropdown custom) ----
     const brandDropdown = $("brandDropdown");

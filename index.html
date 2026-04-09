@@ -137,6 +137,17 @@
       <div class="cat-list" id="categoriesContainer" role="group" aria-label="Catégories">
         <!-- Généré par app.js -->
       </div>
+
+      <!-- Dropdown catégorie (mobile uniquement) -->
+      <div class="cat-dropdown" id="catDropdown">
+        <button class="brand-dropdown-btn" id="catDropdownBtn" type="button" aria-haspopup="listbox">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          <span id="catDropdownLabel">Tous</span>
+          <svg class="brand-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="brand-dropdown-menu hidden" id="catDropdownMenu" role="listbox"></div>
+      </div>
+
       <div class="brand-dropdown" id="brandDropdown">
         <button class="brand-dropdown-btn" id="brandDropdownBtn" type="button" aria-haspopup="listbox">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
