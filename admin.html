@@ -111,11 +111,31 @@
               <input type="file" id="fieldFile" accept="image/*">
             </label>
           </div>
-          <img id="imgPreview" class="img-preview hidden" alt="Aperçu">
+          <div class="img-preview-wrap">
+            <img id="imgPreview" class="img-preview hidden" alt="Aperçu">
+          </div>
         </div>
         <div class="field">
           <label>Lien produit</label>
           <input type="text" id="fieldLink" placeholder="https://…">
+        </div>
+        <div class="field">
+          <label class="toggle-label">
+            <span>Visible sur le catalogue</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="fieldVisible" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </label>
+        </div>
+        <div class="field">
+          <label class="toggle-label">
+            <span>💚 Coup de Coeur</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="fieldCoupDeCoeur">
+              <span class="toggle-slider"></span>
+            </label>
+          </label>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-ghost" id="cancelProduct">Annuler</button>

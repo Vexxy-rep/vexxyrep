@@ -49,6 +49,8 @@
   const fieldDesc      = null;
   const fieldImage     = $("fieldImage");
   const fieldFile      = $("fieldFile");
+  const fieldVisible      = $("fieldVisible");
+  const fieldCoupDeCoeur  = $("fieldCoupDeCoeur");
   const imgPreview     = $("imgPreview");
   const closeProductModal = $("closeProductModal");
   const cancelProduct  = $("cancelProduct");
@@ -200,13 +202,22 @@
           : `<div class="product-thumb-placeholder">👕</div>`
         }
         <div class="product-info">
-          <div class="product-info-name">${esc(p.name)}</div>
+          <div class="product-info-name">
+            ${esc(p.name)}
+            ${p.visible === false ? `<span class="badge-hidden">Masqué</span>` : ""}
+          </div>
           <div class="product-info-meta">
             <span>🏷 ${esc(p.category_label || p.category_id || "—")}</span>
             <span>💰 ${esc(p.price || "—")}</span>
           </div>
         </div>
         <div class="product-actions">
+          <button class="btn-fav" data-id="${p.id}" data-fav="${!!p.coup_de_coeur}" title="${p.coup_de_coeur ? "Retirer Coup de Coeur" : "Marquer Coup de Coeur"}">
+            ${p.coup_de_coeur ? "💚" : "🤍"}
+          </button>
+          <button class="btn-toggle" data-id="${p.id}" data-visible="${p.visible !== false}" title="${p.visible !== false ? "Masquer du catalogue" : "Afficher dans le catalogue"}">
+            ${p.visible !== false ? "👁 Visible" : "🚫 Masqué"}
+          </button>
           <button class="btn-edit" data-id="${p.id}">Modifier</button>
           <button class="btn-del"  data-id="${p.id}">Supprimer</button>
         </div>
@@ -267,6 +278,7 @@
   // ---- Product Modal ----
   function openProductModal(product = null) {
     productForm.reset();
+    imgPreview.src = "";
     imgPreview.classList.add("hidden");
 
     if (product) {
@@ -278,9 +290,12 @@
       fieldBrand.value         = product.brand || "";
       fieldImage.value         = product.image || "";
       fieldLink.value          = product.link || "";
+      fieldVisible.checked       = product.visible !== false;
+      fieldCoupDeCoeur.checked   = !!product.coup_de_coeur;
       if (product.image) {
-        imgPreview.src = product.image;
-        imgPreview.classList.remove("hidden");
+        imgPreview.onload  = () => imgPreview.classList.remove("hidden");
+        imgPreview.onerror = () => imgPreview.classList.add("hidden");
+        imgPreview.src     = product.image;
       }
     } else {
       modalTitle.textContent = "Ajouter un produit";
@@ -345,6 +360,8 @@
       brand:       fieldBrand.value.trim(),
       image:       fieldImage.value.trim(),
       link:        fieldLink.value.trim(),
+      visible:        fieldVisible.checked,
+      coup_de_coeur:  fieldCoupDeCoeur.checked,
     };
     try {
       if (fieldId.value) {
@@ -362,9 +379,55 @@
   });
 
   // Edit / Delete product (event delegation)
-  productsList.addEventListener("click", e => {
-    const editBtn = e.target.closest(".btn-edit");
-    const delBtn  = e.target.closest(".btn-del[data-id]");
+  productsList.addEventListener("click", async e => {
+    const editBtn   = e.target.closest(".btn-edit");
+    const delBtn    = e.target.closest(".btn-del[data-id]");
+    const toggleBtn = e.target.closest(".btn-toggle");
+    const favBtn    = e.target.closest(".btn-fav");
+
+    if (favBtn) {
+      const id      = favBtn.dataset.id;
+      const current = favBtn.dataset.fav === "true";
+      const p       = products.find(x => x.id == id);
+      if (!p) return;
+      try {
+        await api("PUT", `/api/admin/products/${id}`, {
+          name: p.name, category_id: p.category_id, brand: p.brand,
+          image: p.image, link: p.link, price: p.price,
+          visible: p.visible !== false, coup_de_coeur: !current,
+        });
+        p.coup_de_coeur = !current;
+        favBtn.dataset.fav = String(!current);
+        favBtn.textContent = !current ? "💚" : "🤍";
+        favBtn.title = !current ? "Retirer Coup de Coeur" : "Marquer Coup de Coeur";
+      } catch (err) {
+        toast(err.message, "error");
+      }
+      return;
+    }
+
+    if (toggleBtn) {
+      const id      = toggleBtn.dataset.id;
+      const current = toggleBtn.dataset.visible === "true";
+      const p       = products.find(x => x.id == id);
+      if (!p) return;
+      try {
+        await api("PUT", `/api/admin/products/${id}`, {
+          name: p.name, category_id: p.category_id, brand: p.brand,
+          image: p.image, link: p.link, price: p.price,
+          visible: !current, coup_de_coeur: !!p.coup_de_coeur,
+        });
+        p.visible = !current;
+        toggleBtn.dataset.visible = String(!current);
+        toggleBtn.textContent = !current ? "👁 Visible" : "🚫 Masqué";
+        toggleBtn.title = !current ? "Masquer du catalogue" : "Afficher dans le catalogue";
+        toast(!current ? "Produit masqué." : "Produit visible !");
+      } catch (err) {
+        toast(err.message, "error");
+      }
+      return;
+    }
+
     if (editBtn) {
       const p = products.find(x => x.id == editBtn.dataset.id);
       if (p) openProductModal(p);

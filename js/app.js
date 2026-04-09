@@ -213,6 +213,7 @@
       return `
         <article class="product-card ${p.category === 'shoes' ? 'cat-shoes' : ''}" data-id="${p.id}" style="animation-delay:${isSearch ? 0 : i * 0.06}s">
           <div class="card-img-wrapper">
+            ${p.coup_de_coeur ? `<span class="card-fav-badge">💚 Coup de Coeur</span>` : ""}
             <img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy"
                  onerror="this.src='https://picsum.photos/seed/fallback-${p.id}/400/500'">
             ${p.link ? `<a class="card-view-btn" href="${esc(p.link)}" target="_blank" rel="noopener noreferrer">Voir le produit →</a>` : ""}

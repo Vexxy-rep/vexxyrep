@@ -36,8 +36,10 @@ async function createTables(client) {
       created_at  TIMESTAMPTZ  DEFAULT NOW()
     );
   `);
-  // Migration : ajoute brand si la table existait déjà sans cette colonne
+  // Migrations
   await client.query(`ALTER TABLE products ADD COLUMN IF NOT EXISTS brand VARCHAR(100) DEFAULT '';`);
+  await client.query(`ALTER TABLE products ADD COLUMN IF NOT EXISTS visible BOOLEAN DEFAULT TRUE;`);
+  await client.query(`ALTER TABLE products ADD COLUMN IF NOT EXISTS coup_de_coeur BOOLEAN DEFAULT FALSE;`);
 
   console.log("   ✓ Tables créées (ou déjà existantes)");
 }
