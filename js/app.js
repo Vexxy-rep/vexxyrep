@@ -210,7 +210,6 @@
           <div class="card-img-wrapper">
             <img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy"
                  onerror="this.src='https://picsum.photos/seed/fallback-${p.id}/400/500'">
-            <span class="card-badge">${esc(catLabel)}</span>
             ${p.link ? `<a class="card-view-btn" href="${esc(p.link)}" target="_blank" rel="noopener noreferrer">Voir le produit →</a>` : ""}
           </div>
           <div class="card-body">
