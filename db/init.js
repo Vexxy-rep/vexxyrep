@@ -40,6 +40,7 @@ async function createTables(client) {
   await client.query(`ALTER TABLE products ADD COLUMN IF NOT EXISTS brand VARCHAR(100) DEFAULT '';`);
   await client.query(`ALTER TABLE products ADD COLUMN IF NOT EXISTS visible BOOLEAN DEFAULT TRUE;`);
   await client.query(`ALTER TABLE products ADD COLUMN IF NOT EXISTS coup_de_coeur BOOLEAN DEFAULT FALSE;`);
+  await client.query(`ALTER TABLE products ADD COLUMN IF NOT EXISTS quality SMALLINT DEFAULT NULL;`);
 
   console.log("   ✓ Tables créées (ou déjà existantes)");
 }

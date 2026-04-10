@@ -69,7 +69,7 @@ app.get("/api/products", async (_req, res) => {
   try {
     const [catRows, prodRows] = await Promise.all([
       db.query("SELECT id, label FROM categories ORDER BY sort_order"),
-      db.query("SELECT id, name, category_id AS category, brand, image, link, price, coup_de_coeur FROM products WHERE visible = TRUE ORDER BY id"),
+      db.query("SELECT id, name, category_id AS category, brand, image, link, price, coup_de_coeur, quality FROM products WHERE visible = TRUE ORDER BY id"),
     ]);
     const config = require("./data/products.json").config;
     res.json({
@@ -207,12 +207,12 @@ app.get("/api/admin/products", adminAuth, async (_req, res) => {
 
 app.post("/api/admin/products", adminAuth, async (req, res) => {
   try {
-    const { name, category_id, brand, image, link, price, visible, coup_de_coeur } = req.body;
+    const { name, category_id, brand, image, link, price, visible, coup_de_coeur, quality } = req.body;
     if (!name) return res.status(400).json({ error: "Le nom est requis." });
     const { rows } = await db.query(
-      `INSERT INTO products (name, category_id, brand, image, link, price, visible, coup_de_coeur)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
-      [name, category_id || null, brand || "", image || "", link || "", price || "", visible !== false, !!coup_de_coeur]
+      `INSERT INTO products (name, category_id, brand, image, link, price, visible, coup_de_coeur, quality)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`,
+      [name, category_id || null, brand || "", image || "", link || "", price || "", visible !== false, !!coup_de_coeur, quality || null]
     );
     res.json(rows[0]);
   } catch (err) {
@@ -222,12 +222,12 @@ app.post("/api/admin/products", adminAuth, async (req, res) => {
 
 app.put("/api/admin/products/:id", adminAuth, async (req, res) => {
   try {
-    const { name, category_id, brand, image, link, price, visible, coup_de_coeur } = req.body;
+    const { name, category_id, brand, image, link, price, visible, coup_de_coeur, quality } = req.body;
     const { rows } = await db.query(
       `UPDATE products
-       SET name=$1, category_id=$2, brand=$3, image=$4, link=$5, price=$6, visible=$7, coup_de_coeur=$8
-       WHERE id=$9 RETURNING *`,
-      [name, category_id || null, brand || "", image || "", link || "", price || "", visible !== false, !!coup_de_coeur, req.params.id]
+       SET name=$1, category_id=$2, brand=$3, image=$4, link=$5, price=$6, visible=$7, coup_de_coeur=$8, quality=$9
+       WHERE id=$10 RETURNING *`,
+      [name, category_id || null, brand || "", image || "", link || "", price || "", visible !== false, !!coup_de_coeur, quality || null, req.params.id]
     );
     if (!rows.length) return res.status(404).json({ error: "Produit introuvable." });
     res.json(rows[0]);

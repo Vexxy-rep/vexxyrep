@@ -571,9 +571,6 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 .cat-shoes .card-img-wrapper {
   aspect-ratio: 16/9;
 }
-@media (max-width: 600px) {
-  .cat-shoes { grid-column: span 1; }
-}
 .card-img-wrapper img {
   width: 100%; height: 100%;
   object-fit: cover;
@@ -1030,8 +1027,11 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   /* Grille 2 colonnes */
   .products-grid {
     grid-template-columns: 1fr 1fr;
+    grid-auto-flow: row dense;
     gap: .65rem;
   }
+  .product-card { grid-row: span 2; } /* carte normale : 2 rangs de hauteur */
+  .cat-shoes    { grid-row: span 1; } /* shoes : 1 rang → 2 empilées = 1 normale */
 
   /* Section produits */
   .products-section { padding: 1.1rem 0 2rem; }
@@ -1052,6 +1052,16 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   .copy-btn svg  { width: 14px; height: 14px; }
   .report-btn    { font-size: .67rem; padding: .4rem .5rem; margin-top: .35rem; }
 
+  /* Shoes : mini-carte empilée (haut/bas, 2 = 1 normale) */
+  .cat-shoes .card-body        { padding: .3rem .4rem .35rem; }
+  .cat-shoes .card-name        { font-size: .65rem; line-height: 1.3; -webkit-line-clamp: 2; }
+  .cat-shoes .card-quality     { display: none; }
+  .cat-shoes .card-price       { font-size: .72rem; }
+  .cat-shoes .copy-btn,
+  .cat-shoes .report-btn       { display: none; }
+  .cat-shoes .card-fav-badge   { font-size: .5rem; padding: .15rem .3rem; top: .3rem; left: .3rem; }
+  .cat-shoes .card-footer      { margin-top: .2rem; }
+
   /* Toast centré */
   .toast { bottom: 1.2rem; right: 1rem; left: 1rem; justify-content: center; }
 
@@ -1060,4 +1070,26 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   .footer-body    { padding-bottom: 1.25rem; gap: .65rem; }
   .footer-desc    { font-size: .8rem; }
   .footer-bottom  { font-size: .72rem; padding: .9rem 1.5rem; }
+}
+
+/* ══════════════════════════════════════════
+   ÉTOILES QUALITÉ
+══════════════════════════════════════════ */
+.card-quality {
+  display: flex;
+  gap: 2px;
+  margin: .35rem 0 .1rem;
+}
+.star {
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform .15s ease;
+}
+.star-filled {
+  color: #f5c518;
+  text-shadow: 0 0 6px rgba(245, 197, 24, .45);
+}
+.star-empty {
+  color: var(--text-muted, #555);
+  opacity: .4;
 }

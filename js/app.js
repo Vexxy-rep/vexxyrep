@@ -220,6 +220,7 @@
           </div>
           <div class="card-body">
             <h3 class="card-name" title="${esc(p.name)}">${hlName(p.name, q)}</h3>
+            ${renderStars(p.quality)}
             <div class="card-footer">
               <span class="card-price">${esc(p.price)}</span>
               <button class="copy-btn" data-link="${esc(p.link)}"
@@ -279,6 +280,17 @@
     pagination.innerHTML = html;
   }
 
+
+  // ---- Étoiles qualité ----
+  function renderStars(quality) {
+    if (!quality || quality < 1 || quality > 5) return "";
+    const filled = Math.round(quality);
+    let stars = "";
+    for (let i = 1; i <= 5; i++) {
+      stars += `<span class="star ${i <= filled ? "star-filled" : "star-empty"}">★</span>`;
+    }
+    return `<div class="card-quality" aria-label="Qualité : ${filled} sur 5">${stars}</div>`;
+  }
 
   // ---- SVG helpers ----
   function svgClipboard() {

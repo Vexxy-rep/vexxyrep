@@ -51,6 +51,7 @@
   const fieldFile      = $("fieldFile");
   const fieldVisible      = $("fieldVisible");
   const fieldCoupDeCoeur  = $("fieldCoupDeCoeur");
+  const fieldQuality      = $("fieldQuality");
   const imgPreview     = $("imgPreview");
   const closeProductModal = $("closeProductModal");
   const cancelProduct  = $("cancelProduct");
@@ -210,6 +211,9 @@
             <span>🏷 ${esc(p.category_label || p.category_id || "—")}</span>
             <span>💰 ${esc(p.price || "—")}</span>
           </div>
+          <div class="product-stars">
+            ${[1,2,3,4,5].map(i => `<button class="star-btn ${i <= (p.quality || 0) ? "active" : ""}" data-id="${p.id}" data-star="${i}" title="${i} étoile${i > 1 ? "s" : ""}">★</button>`).join("")}
+          </div>
         </div>
         <div class="product-actions">
           <button class="btn-fav" data-id="${p.id}" data-fav="${!!p.coup_de_coeur}" title="${p.coup_de_coeur ? "Retirer Coup de Coeur" : "Marquer Coup de Coeur"}">
@@ -292,6 +296,7 @@
       fieldLink.value          = product.link || "";
       fieldVisible.checked       = product.visible !== false;
       fieldCoupDeCoeur.checked   = !!product.coup_de_coeur;
+      fieldQuality.value         = product.quality != null ? String(product.quality) : "";
       if (product.image) {
         imgPreview.onload  = () => imgPreview.classList.remove("hidden");
         imgPreview.onerror = () => imgPreview.classList.add("hidden");
@@ -362,6 +367,7 @@
       link:        fieldLink.value.trim(),
       visible:        fieldVisible.checked,
       coup_de_coeur:  fieldCoupDeCoeur.checked,
+      quality:        fieldQuality.value ? parseInt(fieldQuality.value) : null,
     };
     try {
       if (fieldId.value) {
@@ -380,10 +386,34 @@
 
   // Edit / Delete product (event delegation)
   productsList.addEventListener("click", async e => {
+    const starBtn   = e.target.closest(".star-btn");
     const editBtn   = e.target.closest(".btn-edit");
     const delBtn    = e.target.closest(".btn-del[data-id]");
     const toggleBtn = e.target.closest(".btn-toggle");
     const favBtn    = e.target.closest(".btn-fav");
+
+    if (starBtn) {
+      const id         = starBtn.dataset.id;
+      const star       = parseInt(starBtn.dataset.star);
+      const p          = products.find(x => x.id == id);
+      if (!p) return;
+      const newQuality = p.quality === star ? null : star;
+      try {
+        await api("PUT", `/api/admin/products/${id}`, {
+          name: p.name, category_id: p.category_id, brand: p.brand,
+          image: p.image, link: p.link, price: p.price,
+          visible: p.visible !== false, coup_de_coeur: !!p.coup_de_coeur,
+          quality: newQuality,
+        });
+        p.quality = newQuality;
+        document.querySelectorAll(`.star-btn[data-id="${id}"]`).forEach(s => {
+          s.classList.toggle("active", parseInt(s.dataset.star) <= (newQuality || 0));
+        });
+      } catch (err) {
+        toast(err.message, "error");
+      }
+      return;
+    }
 
     if (favBtn) {
       const id      = favBtn.dataset.id;
@@ -394,7 +424,7 @@
         await api("PUT", `/api/admin/products/${id}`, {
           name: p.name, category_id: p.category_id, brand: p.brand,
           image: p.image, link: p.link, price: p.price,
-          visible: p.visible !== false, coup_de_coeur: !current,
+          visible: p.visible !== false, coup_de_coeur: !current, quality: p.quality ?? null,
         });
         p.coup_de_coeur = !current;
         favBtn.dataset.fav = String(!current);
@@ -415,7 +445,7 @@
         await api("PUT", `/api/admin/products/${id}`, {
           name: p.name, category_id: p.category_id, brand: p.brand,
           image: p.image, link: p.link, price: p.price,
-          visible: !current, coup_de_coeur: !!p.coup_de_coeur,
+          visible: !current, coup_de_coeur: !!p.coup_de_coeur, quality: p.quality ?? null,
         });
         p.visible = !current;
         toggleBtn.dataset.visible = String(!current);
