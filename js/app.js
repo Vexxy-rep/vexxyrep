@@ -69,7 +69,7 @@
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
 
-      PRODUCTS    = data.products    || [];
+      PRODUCTS    = (data.products || []).sort(() => Math.random() - 0.5);
       CATEGORIES  = data.categories  || [];
       SITE_CONFIG = data.config      || {};
 

@@ -345,6 +345,10 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   box-shadow: 0 16px 48px rgba(0,0,0,.45);
   animation: dropDown .2s ease;
   display: flex; flex-direction: column; gap: .15rem;
+  max-height: 280px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-h) transparent;
 }
 .brand-dropdown-menu.hidden { display: none; }
 
@@ -1061,6 +1065,7 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   .cat-shoes .report-btn       { display: none; }
   .cat-shoes .card-fav-badge   { font-size: .5rem; padding: .15rem .3rem; top: .3rem; left: .3rem; }
   .cat-shoes .card-footer      { margin-top: .2rem; }
+
 
   /* Toast centré */
   .toast { bottom: 1.2rem; right: 1rem; left: 1rem; justify-content: center; }
